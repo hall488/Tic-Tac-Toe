@@ -1,6 +1,17 @@
 const displayController = (() => {
 
-    let container = document.querySelector('.container');
+    const container = document.querySelector('.container');
+    const cells = document.querySelectorAll('.cell');
+
+    Array.from(cells).forEach(c => {
+        c.addEventListener('click', handleInput.bind(c));
+    });
+
+    function handleInput() {
+        input = [this.getAttribute('row'), this.getAttribute('column')];
+        console.log(input);
+        game.nextTurn(input);
+    }
     
     const updateDisplay = (character, row, column) => {
         container.children[row].children[column].textContent = character;
@@ -23,7 +34,11 @@ const gameBoard = (() => {
         gamePrompt = string;
     }
 
-    return {getBoardState, setBoardCell, getBoardCell, setGamePrompt};
+    const checkForWinner = () => {
+        return false;
+    }
+
+    return {checkForWinner, getBoardState, setBoardCell, getBoardCell, setGamePrompt};
 })();
 
 
@@ -31,44 +46,48 @@ const player = (character) => {
 
     const getCharacter = () => character;
     const getPlayerInput = () => {
-        //call from display
+        displayController.getInput();
     }
 
-    return {getCharacter};
+    return {getPlayerInput, getCharacter};
 }
 
 const game = (() => {
 
     let players = [];
-    let board;
     let turn;
-    
+    let gameOver = false;
 
     const startGame = (player1, player2) => {
         players.push(player1);
         players.push(player2);
-        board = gameBoard();
         turn = 0;
-        loop();
+        gameBoard.setGamePrompt(`Player ${players[turn]} Turn`);
     }
 
-    const nextTurn = () => {
-        let input;
-        for(let inputValid = false; !inputValid;) {
-            input = players[turn].getPlayerInput();
-            inputValid = (board.getBoardCell(input[0], input[1]) == '');
+    const nextTurn = (input) => {
+
+        if(gameOver) return '';
+
+        let inputValidity = (gameBoard.getBoardCell(input[0], input[1]) == '');
+
+        if(inputValidity) {
+            gameBoard.setBoardCell(players[turn].getCharacter(), input[0], input[1]);
+            
+            if(gameBoard.checkForWinner()) {
+                gameBoard.setGamePrompt(`Player ${players[turn]} Wins`);
+                gameOver = true;
+            } else {
+                turn = turn ? 0 : 1;
+                gameBoard.setGamePrompt(`Player ${players[turn]} Turn`);
+            }
+            
         }
-        board.setBoardCell(player[turn].getCharacter(), input[0], input[1]);
-        turn = !turn;
+
     }
 
-    const loop = () => {
-        for(;board.checkForWinner();) {
-            board.setGamePrompt(`Player ${players[turn]} Turn`);
-            nextTurn();
-        }
-        board.setGamePrompt(`Player ${players[!turn]} Wins`);
-    }
+    return {startGame, nextTurn};
 
 })();
 
+game.startGame(player('X'), player('O'));
