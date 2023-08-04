@@ -1,3 +1,13 @@
+const displayController = (() => {
+
+    let container = document.querySelector('.container');
+    
+    const updateDisplay = (character, row, column) => {
+        container.children[row].children[column].textContent = character;
+    }
+    
+    return {updateDisplay};
+})();
 
 const gameBoard = (() => {
     let boardState = [['','',''],['','',''],['','','']];
@@ -7,6 +17,7 @@ const gameBoard = (() => {
     const getBoardCell = (row, column) => boardState[row][column];
     const setBoardCell = (character, row, column) => {
         boardState[row][column] = character;
+        displayController.updateDisplay(character, row, column);
     };
     const setGamePrompt = (string) => {
         gamePrompt = string;
@@ -31,6 +42,7 @@ const game = (() => {
     let players = [];
     let board;
     let turn;
+    
 
     const startGame = (player1, player2) => {
         players.push(player1);
@@ -60,8 +72,3 @@ const game = (() => {
 
 })();
 
-const displayController = (() => {
-
-    
-
-})();
