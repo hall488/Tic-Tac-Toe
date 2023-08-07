@@ -1,5 +1,6 @@
 const displayController = (() => {
 
+    const gamePrompt = document.querySelector('.game-prompt');
     const container = document.querySelector('.container');
     const cells = document.querySelectorAll('.cell');
 
@@ -16,13 +17,16 @@ const displayController = (() => {
     const updateDisplay = (character, row, column) => {
         container.children[row].children[column].textContent = character;
     }
+
+    const setGamePrompt = (string) => {
+        gamePrompt.textContent = string;
+    }
     
-    return {updateDisplay};
+    return {setGamePrompt, updateDisplay};
 })();
 
 const gameBoard = (() => {
     let boardState = [['','',''],['','',''],['','','']];
-    let gamePrompt = '';
 
     const getBoardState = () => boardState;
     const getBoardCell = (row, column) => boardState[row][column];
@@ -30,15 +34,26 @@ const gameBoard = (() => {
         boardState[row][column] = character;
         displayController.updateDisplay(character, row, column);
     };
-    const setGamePrompt = (string) => {
-        gamePrompt = string;
-    }
+    
 
-    const checkForWinner = () => {
+    const checkForWinner = (character, row, column) => {
+
+        let rowCheck = boardState[row];
+        let colCheck = [boardState[0][column],boardState[1][column],boardState[2][column]];
+        let crossCheck1 = [boardState[0][0], boardState[1][1], boardState[2][2]];
+        let crossCheck2 = [boardState[0][2], boardState[1][1], boardState[2][0]];        
+        
+        if( rowCheck.every(c => c == character) ||
+            colCheck.every(c => c == character) ||
+            crossCheck1.every(c => c == character) ||
+            crossCheck2.every(c => c == character))
+            return true;
+
         return false;
+
     }
 
-    return {checkForWinner, getBoardState, setBoardCell, getBoardCell, setGamePrompt};
+    return {checkForWinner, getBoardState, setBoardCell, getBoardCell};
 })();
 
 
@@ -62,7 +77,7 @@ const game = (() => {
         players.push(player1);
         players.push(player2);
         turn = 0;
-        gameBoard.setGamePrompt(`Player ${players[turn]} Turn`);
+        displayController.setGamePrompt(`Player ${players[turn].getCharacter()} Turn`);
     }
 
     const nextTurn = (input) => {
@@ -74,12 +89,12 @@ const game = (() => {
         if(inputValidity) {
             gameBoard.setBoardCell(players[turn].getCharacter(), input[0], input[1]);
             
-            if(gameBoard.checkForWinner()) {
-                gameBoard.setGamePrompt(`Player ${players[turn]} Wins`);
+            if(gameBoard.checkForWinner(players[turn].getCharacter(), input[0], input[1])) {
+                displayController.setGamePrompt(`Player ${players[turn].getCharacter()} Wins`);
                 gameOver = true;
             } else {
                 turn = turn ? 0 : 1;
-                gameBoard.setGamePrompt(`Player ${players[turn]} Turn`);
+                displayController.setGamePrompt(`Player ${players[turn].getCharacter()} Turn`);
             }
             
         }
