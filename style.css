@@ -1,17 +1,112 @@
-.container {
-    display: flex;
-    width: 300px;
-    height: 300px;
-    flex-wrap: wrap;
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+* {
+    font-family: 'Roboto', sans-serif;
 }
 
-.row {
+:root {
+    --backlight: crimson;
+}
+
+body {
+    margin: 0;
+    padding: 0;
     display: flex;
-    flex: 1 0 300px;
+    flex-direction: column;
+    background-color: whitesmoke;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    gap: 32px;
+}
+
+.container {
+    display: grid;
+    width: 300px;
+    height: 300px;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    background-color: black;
+    border: 1px solid black;
 }
 
 .cell {
-    flex: 1 0 100px;
+    flex: 1;
     box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: none;
+    background-color: whitesmoke;
     border: 1px solid black;
+}
+
+.restart {
+    border-radius: 16px;
+    border: 1px solid black;
+    animation: none;
+    visibility: hidden;
+    background-color: whitesmoke;
+    padding: 8px 16px;
+}
+
+.restart:hover {
+    animation: RestartAnimation 2s linear infinite;
+}
+
+.footer {
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 20px;
+    font-size: 20px;
+}
+
+.fa-github {
+    color: black;
+    font-size: 24px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.fa-github:hover {
+    transform: rotate(360deg) scale(1.2);
+}
+
+@keyframes MoveUpDown {
+    0%, 100% {
+      transform: translateY(0);
+      filter: drop-shadow(0 0px 1px var(--backlight));
+    }
+    50% {
+      transform: translateY(-10px);
+      filter: drop-shadow(0 20px 5px var(--backlight));
+    }
+}
+
+@keyframes MoveDown {
+    0%{
+      transform: translateY(-10px);
+      filter: drop-shadow(0 20px 5px green);
+    }
+    100% {
+      transform: translateY(0px);
+      filter: drop-shadow(0 0px 1px green);
+    }
+}
+
+@keyframes RestartAnimation {
+    0%, 100% {
+      transform: translateY(0);
+      filter: drop-shadow(0 0px 1px green);
+    }
+    50% {
+      transform: translateY(-10px);
+      filter: drop-shadow(0 10px 5px green);
+    }
 }
