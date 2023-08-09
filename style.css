@@ -39,6 +39,7 @@ body {
     animation: none;
     background-color: whitesmoke;
     border: 1px solid black;
+    text-align: center;
 }
 
 .restart {
@@ -79,34 +80,41 @@ body {
 }
 
 @keyframes MoveUpDown {
-    0%, 100% {
-      transform: translateY(0);
-      filter: drop-shadow(0 0px 1px var(--backlight));
+
+    0%,
+    100% {
+        transform: translateY(0);
+        filter: drop-shadow(0 0px 1px var(--backlight));
     }
+
     50% {
-      transform: translateY(-10px);
-      filter: drop-shadow(0 20px 5px var(--backlight));
+        transform: translateY(-10px);
+        filter: drop-shadow(0 20px 5px var(--backlight));
     }
 }
 
 @keyframes MoveDown {
-    0%{
-      transform: translateY(-10px);
-      filter: drop-shadow(0 20px 5px green);
+    0% {
+        transform: translateY(-10px);
+        filter: drop-shadow(0 20px 5px green);
     }
+
     100% {
-      transform: translateY(0px);
-      filter: drop-shadow(0 0px 1px green);
+        transform: translateY(0px);
+        filter: drop-shadow(0 0px 1px green);
     }
 }
 
 @keyframes RestartAnimation {
-    0%, 100% {
-      transform: translateY(0);
-      filter: drop-shadow(0 0px 1px green);
+
+    0%,
+    100% {
+        transform: translateY(0);
+        filter: drop-shadow(0 0px 1px green);
     }
+
     50% {
-      transform: translateY(-10px);
-      filter: drop-shadow(0 10px 5px green);
+        transform: translateY(-10px);
+        filter: drop-shadow(0 10px 5px green);
     }
 }
